@@ -5,6 +5,7 @@ colorama==0.4.4
 DateTime==4.4
 et-xmlfile==1.1.0
 Flask==1.1.2
+Flask-Cors==3.0.10
 flask-marshmallow==0.14.0
 flask-restplus==0.13.0
 Flask-SQLAlchemy==2.4.4

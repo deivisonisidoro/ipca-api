@@ -10,8 +10,7 @@ from src.models.accumulated_values import accumulated_values
 app = server.app
 api = server.api
 
-accumulatedValuesDB ={
-    "data" :[
+accumulatedValuesDB =[
         {
         "date": "11/03/2022",
         "values": 10
@@ -24,8 +23,7 @@ accumulatedValuesDB ={
         "date": "13/03/2022",
         "values": 12
         }
-    ]
-}
+]
 
 @api.route("/values")
 class AccumulatedValues(Resource):
