@@ -1,7 +1,9 @@
-# LIBS
-from flask import Flask
+# LIBS 
+from flask import Flask, Response
 from flask_restplus import Api, Resource
-
+from openpyxl import load_workbook
+import json
+from datetime import date, datetime
 # IMPORTS
 from src.server.instance import server
 from src.models.accumulated_values import accumulated_values
@@ -10,23 +12,32 @@ from src.models.accumulated_values import accumulated_values
 app = server.app
 api = server.api
 
-accumulatedValuesDB =[
-        {
-        "date": "11/03/2022",
-        "values": 10
-        },
-        {
-        "date": "12/03/2022",
-        "values": 11
-        },
-        {
-        "date": "13/03/2022",
-        "values": 12
-        }
-]
-
 @api.route("/values")
 class AccumulatedValues(Resource):
-    @api.marshal_list_with(accumulated_values)
+    # @api.marshal_list_with(accumulated_values)    
     def get(self,):
-        return accumulatedValuesDB
+       
+        book = load_workbook("ipca.xlsx")
+        sheet = book.active 
+        
+        rows = sheet.rows
+    
+        
+        headers = [cell.value for cell in next(rows)]
+
+        all_rows = []
+
+        
+        for row in rows:
+            data = {}
+            for title, cell in zip(headers,  row):
+                json_datetime= cell.value
+                if isinstance(cell.value, (datetime, date)):
+                    formatted_datetime = cell.value.isoformat()
+                    json_datetime = json.dumps(formatted_datetime)
+                data[title] = json_datetime
+               
+            all_rows.append(data) 
+        
+        return all_rows
+        
